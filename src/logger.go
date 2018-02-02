@@ -5,20 +5,26 @@ import (
 )
 
 type Settings struct {
+	enabled bool
 }
 
 type Logger struct {
-	settings Settings
+	Settings Settings
+	name string
 }
 
 func NewLogger(name string) Logger {
 	if _, ok := logs[name]; !ok {
-		logs[name] = Logger{}
+		settings := Settings{enabled: true}
+		logs[name] = Logger{name: name, Settings: settings}
 	}
 	return logs[name]
 }
 
 func (l Logger) Log(a ...interface{}) {
+	if !l.Settings.enabled {
+		return
+	}
 	fmt.Println(a...)
 }
 
